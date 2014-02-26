@@ -6,7 +6,6 @@ angular
 
 function primusProvider() {
 
-
   /**
    * Expose primus service.
    */
