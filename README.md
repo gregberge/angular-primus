@@ -1,6 +1,8 @@
-# angular-primus
+# angular-primus [![Build Status](https://travis-ci.org/neoziro/angular-primus.png?branch=master)](https://travis-ci.org/neoziro/angular-primus)
 
 Primus service for Angular.
+
+This plugin works with other Primus plugins like [primus-emitter](https://github.com/cayasso/primus-emitter) and [primus-resource](https://github.com/cayasso/primus-resource).
 
 ## Install
 
@@ -51,6 +53,7 @@ angular.module('controllers.primus', ['primus'])
     myResource.myMethod();
   });
 });
+```
 
 ## License
 
