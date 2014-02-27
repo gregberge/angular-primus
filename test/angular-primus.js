@@ -112,7 +112,6 @@ describe('Primus provider', function () {
 
       primus._resource.trigger('ready');
 
-      $rootScope.$digest();
       expect(spy).to.be.calledWith(primus._resource);
     });
 

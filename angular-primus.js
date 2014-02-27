@@ -63,6 +63,7 @@ function primusProvider() {
       // Resolve promise when resource is ready.
       resource.once('ready', function onReady() {
         resourceDefers[name].resolve(resource);
+        $rootScope.$apply();
       });
 
       // Return promise.
