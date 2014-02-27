@@ -1,6 +1,6 @@
 {
   "name": "angular-primus",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Primus provider for Angular.",
   "main": "angular-primus.js",
   "scripts": {
