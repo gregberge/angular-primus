@@ -5,6 +5,7 @@ angular
 .provider('primus', primusProvider);
 
 function primusProvider() {
+  var provider = this;
 
   /**
    * Expose primus service.
@@ -51,6 +52,8 @@ function primusProvider() {
      */
 
     primus.$resource = function $resource(name, multiplex) {
+      multiplex = typeof multiplex === 'undefined' ? provider.multiplex : multiplex;
+
       // If already defined, return promise.
       if (resourceDefers[name]) return resourceDefers[name].promise;
 
@@ -77,6 +80,7 @@ function primusProvider() {
    * Define options.
    *
    * @param {Object} options
+   * @returns {primusProvider}
    */
 
   this.setOptions = function setOptions(options) {
@@ -88,10 +92,23 @@ function primusProvider() {
    * Define endpoint.
    *
    * @param {String} endpoint
+   * @returns {primusProvider}
    */
 
   this.setEndpoint = function setEndpoint(endpoint) {
     this.endpoint = endpoint;
+    return this;
+  };
+
+  /**
+   * Set the default multiplex option for resource.
+   *
+   * @param {Boolean} multiplex
+   * @returns {primusProvider}
+   */
+
+  this.setDefaultMultiplex = function setDefaultMultiplex(multiplex) {
+    this.multiplex = multiplex;
     return this;
   };
 }

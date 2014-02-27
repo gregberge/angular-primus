@@ -17,16 +17,19 @@ bower install angular-primus
 ```js
 angular.module('controllers.primus', ['primus'])
 .config(function (primusProvider) {
-  // Configure Primus.
   primusProvider
+  // Define Primus endpoint.
   .setEndpoint('http://mywebsite.com')
+  // Define Primus options.
   .setOptions({
     reconnect: {
       minDelay: 100,
       maxDelay: 60000,
       retries: 100
     }
-  });
+  })
+  // Define default multiplex option for resources.
+  .setDefaultMultiplex(false);
 })
 .controller('PrimusCtrl', function ($scope, primus) {
 

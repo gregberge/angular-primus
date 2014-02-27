@@ -62,6 +62,37 @@ describe('Primus provider', function () {
     });
   });
 
+  describe('#setDefaultMultiplex', function () {
+    it('should define the default resource multiplex', function () {
+      module(function (primusProvider) {
+        primusProvider.setDefaultMultiplex(false);
+      });
+
+      inject(function (primus) {
+        primus.$resource('myresource');
+        expect(primus.resource).to.be.calledWith('myresource', false);
+      });
+    });
+
+    it('should be the default option', function () {
+      module(function (primusProvider) {
+        primusProvider.setDefaultMultiplex(false);
+      });
+
+      inject(function (primus) {
+        primus.$resource('myresource', true);
+        expect(primus.resource).to.be.calledWith('myresource', true);
+      });
+    });
+
+    it('should work without', function () {
+      inject(function (primus) {
+        primus.$resource('myresource');
+        expect(primus.resource).to.be.calledWith('myresource', undefined);
+      });
+    });
+  });
+
   describe('#$on', function () {
     var primus, $rootScope;
 
