@@ -33,7 +33,10 @@ function primusProvider() {
     primus.$on = function $on(event, listener) {
       // Wrap primus event with $rootScope.$apply.
       primus.on(event, function () {
-        $rootScope.$apply(listener);
+        var args = arguments;
+        $rootScope.$apply(function () {
+          listener.apply(null, args);
+        });
       });
 
       // Return the deregistration function
