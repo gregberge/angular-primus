@@ -5,11 +5,12 @@
   "authors": [
     "Greg Bergé <neoziro@gmail.com>"
   ],
-  "description": "Primus service for Angular.",
+  "description": "Primus provider for Angular.",
   "main": "angular-primus.js",
   "keywords": [
     "primus",
-    "angular"
+    "angular",
+    "provider"
   ],
   "license": "MIT",
   "ignore": [

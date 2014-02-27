@@ -1,7 +1,7 @@
 {
   "name": "angular-primus",
   "version": "0.1.0",
-  "description": "Primus service for Angular.",
+  "description": "Primus provider for Angular.",
   "main": "angular-primus.js",
   "scripts": {
     "install": "bower install",
@@ -13,7 +13,8 @@
   },
   "keywords": [
     "primus",
-    "angular"
+    "angular",
+    "provider"
   ],
   "author": "Greg Bergé <berge.greg@gmail.com>",
   "license": "MIT",
