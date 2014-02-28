@@ -117,13 +117,13 @@ describe('Primus provider', function () {
     });
 
     it('should return a deregistration method', function () {
-      var listener = sinon.spy();
-      var off = primus.$on('customEvent', listener);
+      var myListener = sinon.spy();
+      var off = primus.$on('customEvent', myListener);
 
       off();
       primus.emit('customEvent');
 
-      expect(listener).to.not.be.called;
+      expect(myListener).to.not.be.called;
     });
   });
 
