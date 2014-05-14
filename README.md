@@ -1,4 +1,4 @@
-# angular-primus [![Build Status](https://travis-ci.org/neoziro/angular-primus.png?branch=master)](https://travis-ci.org/neoziro/angular-primus)
+# angular-primus [![Build Status](https://travis-ci.org/neoziro/angular-primus.svg?branch=master)](https://travis-ci.org/neoziro/angular-primus)
 
 Primus provider for Angular.
 
