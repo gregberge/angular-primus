@@ -4,6 +4,7 @@
   "description": "Primus provider for Angular.",
   "main": "angular-primus.js",
   "scripts": {
+    "postinstall": "bower update --config.interactive=false",
     "test": "karma start --single-run"
   },
   "repository": {
