@@ -23,7 +23,7 @@ function primusProvider() {
 
     /**
      * Listen on events of a given type.
-     * This event make an $rootScope.$apply on the listener.
+     * Calls the listener inside a $rootScope.$apply.
      *
      * @param {String} event
      * @param {Function} listener
@@ -36,6 +36,45 @@ function primusProvider() {
 
       function applyListener() {
         var args = arguments;
+        $rootScope.$apply(function () {
+          listener.apply(null, args);
+        });
+      }
+
+      // Return the deregistration function
+      return function $off() {
+        primus.removeListener(event, applyListener);
+      };
+    };
+
+    /**
+     * Listen on events of a given type, with a filtering pattern.
+     * If the pattern matches, calls the listener inside a $rootScope.$apply.
+     *
+     * @param {String} event
+     * @param {Object|Function} matchPattern
+     *                          - as a function returning true/false
+     *                          - as an object used as lodash _.matches param
+     * @param {Function} listener
+     * @returns {Function} Deregistration function for this listener.
+     */
+
+    primus.$filteredOn = function $filteredOn(event, matchPattern, listener) {
+      // Wrap primus event with $rootScope.$apply.
+      primus.on(event, applyListener);
+
+      var checkMatch;
+      if (_.isFunction(matchPattern))
+        checkMatch = matchPattern;
+      else if (_.isObject(matchPattern))
+        checkMatch = _.matches(matchPattern);
+      else
+        throw new Error('angular-primus $filteredOn() : matchPattern must be a function or an object !');
+
+      function applyListener() {
+        var args = arguments;
+        var isMatching = checkMatch(args[0]);
+        if (! isMatching) return;
         $rootScope.$apply(function () {
           listener.apply(null, args);
         });
