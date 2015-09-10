@@ -47,6 +47,12 @@ angular.module('controllers.primus', ['primus'])
     $scope.customData = customData;
   });
 
+  // Listen custom event with a filter (more details below)
+  // ex. server broadcasting a user account update :
+  primus.$on('account:update', {userId: 23}, function (account) {
+    _.merge($scope.account, account);
+  });
+
   // Send data using primus-emitter.
   primus.send('customEvent', { foo: 'bar' });
 
@@ -57,6 +63,18 @@ angular.module('controllers.primus', ['primus'])
   });
 });
 ```
+
+### about $on and $filteredOn
+
+`$filteredOn` takes as filter either :
+* a function, taking the received data as arguments and returning true/false = match/don't match
+* an object, whom keys will be deep-matched for correspondance with the 1st param of received data, using [lodash matches(...)](https://lodash.com/docs#matches). Example of a deep matching :
+
+  ```javascript
+  primus.$on('node:update', {content: {id: 23, type: 'image'}}, …)
+  ```
+
+Both `$on` and `$filteredOn` will call the listener **in Angular context** (scope.apply). However, `$filteredOn` will not trigger any apply if the received data doesn't match the given filter. This is desirable if your Angular app is heavy.
 
 ## License
 
