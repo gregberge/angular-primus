@@ -23,7 +23,7 @@ function primusProvider() {
 
     /**
      * Listen on events of a given type.
-     * Calls the listener inside a $rootScope.$apply.
+     * Calls the listener inside in Angular context ($evalAsync)
      *
      * @param {String} event
      * @param {Function} listener
@@ -31,25 +31,25 @@ function primusProvider() {
      */
 
     primus.$on = function $on(event, listener) {
-      // Wrap primus event with $rootScope.$apply.
-      primus.on(event, applyListener);
+      // run the listener in Angular context
+      primus.on(event, listenerInAngularContext);
 
-      function applyListener() {
+      function listenerInAngularContext() {
         var args = arguments;
-        $rootScope.$apply(function () {
+        $rootScope.$evalAsync(function () {
           listener.apply(null, args);
         });
       }
 
       // Return the deregistration function
       return function $off() {
-        primus.removeListener(event, applyListener);
+        primus.removeListener(event, listenerInAngularContext);
       };
     };
 
     /**
      * Listen on events of a given type, with a filtering pattern.
-     * If the pattern matches, calls the listener inside a $rootScope.$apply.
+     * If the pattern matches, calls the listener in Angular context ($evalAsync)
      *
      * @param {String} event
      * @param {Object|Function} matchPattern
@@ -60,8 +60,6 @@ function primusProvider() {
      */
 
     primus.$filteredOn = function $filteredOn(event, matchPattern, listener) {
-      // Wrap primus event with $rootScope.$apply.
-      primus.on(event, applyListener);
 
       var checkMatch;
       if (_.isFunction(matchPattern))
@@ -71,18 +69,22 @@ function primusProvider() {
       else
         throw new Error('angular-primus $filteredOn() : matchPattern must be a function or an object !');
 
-      function applyListener() {
+      // run the listener in Angular context
+      primus.on(event, filteredListenerInAngularContext);
+
+      function filteredListenerInAngularContext() {
         var args = arguments;
         var isMatching = checkMatch(args[0]);
         if (! isMatching) return;
-        $rootScope.$apply(function () {
+
+        $rootScope.$evalAsync(function () {
           listener.apply(null, args);
         });
       }
 
       // Return the deregistration function
       return function $off() {
-        primus.removeListener(event, applyListener);
+        primus.removeListener(event, filteredListenerInAngularContext);
       };
     };
 
