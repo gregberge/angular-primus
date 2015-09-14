@@ -101,19 +101,22 @@ describe('Primus provider', function () {
       primus = $injector.get('primus');
     }));
 
-    it('should wrap method in $rootScope.$apply', function () {
+    it('should call the listener in Angular context', function () {
       var watchSpy = sinon.spy();
       $rootScope.$watch(watchSpy);
 
-      expect(watchSpy).to.not.be.called;
+      expect(watchSpy).to.not.have.been.called;
 
       var listener = sinon.spy();
 
       primus.$on('customEvent', listener);
       primus.emit('customEvent');
+      // thanks to $evalAsync, listener exec is scheduled in an angular timeout,
+      // which won't happen in tests. Trigger it :
+      $rootScope.$digest();
 
-      expect(listener).to.be.called;
-      expect(watchSpy).to.be.called;
+      expect(listener, 'listener').to.have.been.called;
+      expect(watchSpy, 'watch').to.have.been.called;
     });
 
     it('should return a deregistration method', function () {
@@ -122,6 +125,7 @@ describe('Primus provider', function () {
 
       off();
       primus.emit('customEvent');
+      $rootScope.$digest();
 
       expect(myListener).to.not.be.called;
     });
@@ -157,6 +161,10 @@ describe('Primus provider', function () {
           // base
           listenerSpy.reset();
           primus.emit('customEvent', {itemId: 1});
+          // thanks to $evalAsync, listener exec is scheduled in an angular timeout,
+          // which won't happen in tests. Trigger it :
+          $rootScope.$digest();
+          
           expect(listenerSpy, 'listenerSpy').to.have.been.calledOnce;
 
           // variant
@@ -167,6 +175,8 @@ describe('Primus provider', function () {
               foo: 42
             }
           });
+          $rootScope.$digest();
+          
           expect(listenerSpy, 'listenerSpy').to.have.been.calledOnce;
         });
 
@@ -175,14 +185,19 @@ describe('Primus provider', function () {
 
           // not the same value
           primus.emit('customEvent', {itemId: 11});
+          // thanks to $evalAsync, listener exec is scheduled in an angular timeout,
+          // which won't happen in tests. Trigger it :
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
 
           // not the same key / missing key
           primus.emit('customEvent', {id: 1});
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
 
           // nothing at all
           primus.emit('customEvent', 42);
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
         });
 
@@ -192,6 +207,9 @@ describe('Primus provider', function () {
           // base
           listenerSpy.reset();
           primus.emit('customEvent', {content: {id: 1}});
+          // thanks to $evalAsync, listener exec is scheduled in an angular timeout,
+          // which won't happen in tests. Trigger it :
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.have.been.calledOnce;
 
           // variant
@@ -203,6 +221,7 @@ describe('Primus provider', function () {
               foo: 42
             }
           });
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.have.been.calledOnce;
         });
 
@@ -211,14 +230,19 @@ describe('Primus provider', function () {
 
           // not the same value
           primus.emit('customEvent', {content: {id: 11}});
+          // thanks to $evalAsync, listener exec is scheduled in an angular timeout,
+          // which won't happen in tests. Trigger it :
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
 
           // not the same key / missing key
           primus.emit('customEvent', {content: {itemId: 1}});
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
 
           // nothing at all
           primus.emit('customEvent', 42);
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
         });
 
@@ -228,6 +252,9 @@ describe('Primus provider', function () {
           // base
           listenerSpy.reset();
           primus.emit('customEvent', {id: 1, content: {id: 1}});
+          // thanks to $evalAsync, listener exec is scheduled in an angular timeout,
+          // which won't happen in tests. Trigger it :
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.have.been.calledOnce;
 
           // variant
@@ -240,6 +267,7 @@ describe('Primus provider', function () {
               bar: 33
             }
           });
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.have.been.calledOnce;
         });
 
@@ -248,22 +276,29 @@ describe('Primus provider', function () {
 
           // not the same value - 1
           primus.emit('customEvent', {id: 11, content: {id: 1}});
+          // thanks to $evalAsync, listener exec is scheduled in an angular timeout,
+          // which won't happen in tests. Trigger it :
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
 
           // not the same value - 2
           primus.emit('customEvent', {id: 1, content: {id: 11}});
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
 
           // missing key - 1
           primus.emit('customEvent', {id: 1});
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
 
           // missing key - 2
           primus.emit('customEvent', {content: {id: 1}});
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
 
           // nothing at all
           primus.emit('customEvent', 42);
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
         });
 
@@ -279,10 +314,14 @@ describe('Primus provider', function () {
 
           listenerSpy.reset();
           primus.emit('customEvent', {id: 1});
+          // thanks to $evalAsync, listener exec is scheduled in an angular timeout,
+          // which won't happen in tests. Trigger it :
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.have.been.calledOnce;
 
           listenerSpy.reset();
           primus.emit('customEvent', {id: 3});
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.have.been.calledOnce;
         });
 
@@ -290,36 +329,46 @@ describe('Primus provider', function () {
           primus.$filteredOn('customEvent', testFunction, listenerSpy);
 
           primus.emit('customEvent', {id: 0});
+          // thanks to $evalAsync, listener exec is scheduled in an angular timeout,
+          // which won't happen in tests. Trigger it :
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
 
-          primus.emit('customEvent', {id: 20});
+          primus.emit('customEvent', {id: 20}); 
+          $rootScope.$digest();
           expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
         });
       });
 
     });
 
-    it('when calling callback, should wrap it in $rootScope.$apply', function () {
+    it('when calling callback, should call it in Angular context', function () {
       expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
       expect(watchSpy, 'watchSpy').to.not.have.been.called;
 
       primus.$filteredOn('customEvent', {id: 1}, listenerSpy);
       primus.emit('customEvent', {id: 1});
-
+      // thanks to $evalAsync, listener exec is scheduled in an angular timeout,
+      // which won't happen in tests. Trigger it :
+      $rootScope.$digest();
+      
       expect(listenerSpy, 'listenerSpy').to.have.been.calledOnce;
       expect(digestWasInProgress).to.be.true;
       expect(watchSpy, 'watchSpy').to.have.been.calledTwice;
     });
 
-    it('when NOT calling callback, should NOT call $rootScope.$apply', function () {
+    it('when NOT calling callback, should NOT trigger a $rootScope $digest', function () {
       expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
       expect(watchSpy, 'watchSpy').to.not.have.been.called;
 
       primus.$filteredOn('customEvent', {id: 1}, listenerSpy);
       primus.emit('customEvent', {id: 2});
 
-      expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
       expect(watchSpy, 'watchSpy').to.not.have.been.called;
+      $rootScope.$digest();
+
+      expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
+      expect(watchSpy, 'watchSpy').to.have.been.calledTwice; // still, due to our explicit $rootScope.$digest
     });
 
     it('should return a working deregistration method', function () {
@@ -327,6 +376,7 @@ describe('Primus provider', function () {
 
       off();
       primus.emit('customEvent', {id: 1});
+      $rootScope.$digest();
 
       expect(listenerSpy, 'listenerSpy').to.not.have.been.called;
     });
