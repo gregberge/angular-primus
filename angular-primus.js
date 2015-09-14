@@ -1,4 +1,4 @@
-/*! Angular primus v1.0.0 | (c) 2013 Greg Bergé | License MIT */
+/*! Angular primus v1.0.1 | (c) 2013 Greg Bergé | License MIT */
 
 angular
 .module('primus', [])
