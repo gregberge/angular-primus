@@ -2,7 +2,7 @@
 
 Primus provider for Angular.
 
-This plugin works with other Primus plugins like [primus-emitter](https://github.com/cayasso/primus-emitter) and [primus-resource](https://github.com/cayasso/primus-resource).
+This plugin works with other Primus plugins like [primus-emitter](https://github.com/cayasso/primus-emitter), [primus-resource](https://github.com/cayasso/primus-resource) and [primus-multiplex](https://github.com/cayasso/primus-multiplex).
 
 ## Install
 
@@ -56,10 +56,17 @@ angular.module('controllers.primus', ['primus'])
   // Send data using primus-emitter.
   primus.send('customEvent', { foo: 'bar' });
 
-
   // Use resource with primus-resource.
   primus.$resource('myResource').then(function (myResource) {
     myResource.myMethod();
+  });
+  
+  // Subscribe to a channel named "Party" using primus-multiplex
+  var channel = primus.$channel('Party');
+  
+  // Listen 'data' event on the channel
+  channel.$on('data', function(data) {
+    console.log(data);
   });
 });
 ```

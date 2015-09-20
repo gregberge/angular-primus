@@ -1,4 +1,4 @@
-/*! Angular primus v1.0.1 | (c) 2013 Greg Bergé | License MIT */
+/*! Angular primus v1.1.0 | (c) 2013 Greg Bergé | License MIT */
 
 angular
 .module('primus', [])
@@ -117,6 +117,46 @@ function primusProvider() {
 
       // Return promise.
       return resourceDefers[name].promise;
+    };
+
+    /**
+     * Connect to a channel using primus-multiplex
+     *
+     * @param {String} channelName - The channel name to subscribe
+     * @returns {Object} An instance of the channel.
+     */
+
+    primus.$channel = function $channel(channelName) {
+
+      var channel = primus.channel(channelName);
+
+      /**
+       * Listen on events of a given type.
+       * Calls the listener inside in Angular context ($evalAsync)
+       *
+       * @param {String} event
+       * @param {Function} listener
+       * @returns {Function} Deregistration function for this listener.
+       */
+
+      channel.$on = function $on(event, listener) {
+        // run the listener in Angular context
+        channel.on(event, listenerInAngularContext);
+
+        function listenerInAngularContext() {
+          var args = arguments;
+          $rootScope.$evalAsync(function () {
+            listener.apply(null, args);
+          });
+        }
+
+        // Return the deregistration function
+        return function $off() {
+          channel.removeListener(event, listenerInAngularContext);
+        };
+      };
+
+      return channel;
     };
 
     return primus;
