@@ -36,7 +36,7 @@ function primusProvider() {
 
       function listenerInAngularContext() {
         var args = arguments;
-        $rootScope.$evalAsync(function () {
+        $rootScope.$eval(function () {
           listener.apply(null, args);
         });
       }
