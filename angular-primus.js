@@ -23,7 +23,7 @@ function primusProvider() {
 
     /**
      * Listen on events of a given type.
-     * Calls the listener inside in Angular context ($evalAsync)
+     * Calls the listener inside in Angular context ($eval)
      *
      * @param {String} event
      * @param {Function} listener
@@ -36,7 +36,7 @@ function primusProvider() {
 
       function listenerInAngularContext() {
         var args = arguments;
-        $rootScope.$evalAsync(function () {
+        $rootScope.$eval(function () {
           listener.apply(null, args);
         });
       }
@@ -49,7 +49,7 @@ function primusProvider() {
 
     /**
      * Listen on events of a given type, with a filtering pattern.
-     * If the pattern matches, calls the listener in Angular context ($evalAsync)
+     * If the pattern matches, calls the listener in Angular context ($eval)
      *
      * @param {String} event
      * @param {Object|Function} matchPattern
@@ -77,7 +77,7 @@ function primusProvider() {
         var isMatching = checkMatch(args[0]);
         if (! isMatching) return;
 
-        $rootScope.$evalAsync(function () {
+        $rootScope.$eval(function () {
           listener.apply(null, args);
         });
       }
