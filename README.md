@@ -1,5 +1,7 @@
 # angular-primus [![Build Status](https://travis-ci.org/neoziro/angular-primus.svg?branch=master)](https://travis-ci.org/neoziro/angular-primus)
 
+# This plugin is no longer actively maintained, you can still use it but issues will not be resolved. If you want the npm name, you can contact me by email.
+
 Primus provider for Angular.
 
 This plugin works with other Primus plugins like [primus-emitter](https://github.com/cayasso/primus-emitter) and [primus-resource](https://github.com/cayasso/primus-resource).
