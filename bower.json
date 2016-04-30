@@ -1,6 +1,6 @@
 {
   "name": "angular-primus",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "homepage": "https://github.com/neoziro/angular-primus",
   "authors": [
     "Greg Bergé <neoziro@gmail.com>"
@@ -10,7 +10,8 @@
   "keywords": [
     "primus",
     "angular",
-    "provider"
+    "provider",
+    "multiplex"
   ],
   "license": "MIT",
   "ignore": [

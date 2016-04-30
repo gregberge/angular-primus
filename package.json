@@ -1,6 +1,6 @@
 {
   "name": "angular-primus",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Primus provider for Angular.",
   "main": "angular-primus.js",
   "scripts": {
@@ -14,7 +14,8 @@
   "keywords": [
     "primus",
     "angular",
-    "provider"
+    "provider",
+    "multiplex"
   ],
   "author": "Greg Bergé <berge.greg@gmail.com>",
   "license": "MIT",
